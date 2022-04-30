@@ -1,5 +1,8 @@
-import type { VFC } from 'react';
+import { VFC } from 'react';
 import Link from 'next/link';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { css } from '@emotion/react';
 import {
   RiCalendarTodoFill,
@@ -8,21 +11,28 @@ import {
 } from 'react-icons/ri';
 import { PostProps } from '@/type/post';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
+  const formatedTime = dayjs.utc(time).tz('Asia/Tokyo').format('YYYY.MM.DD');
   return (
     <article css={s_article}>
       <div css={s_articleHead}>
         <div css={s_articleHeadWrap}>
           <p css={s_time}>
-            <Link href={`/detail/${id}`}>
+            <Link href={`/post/${id}`}>
               <a css={s_timeLink}>
                 <RiCalendarTodoFill css={s_timeIcon} />
-                <time>{time}</time>
+                <time>{formatedTime}</time>
               </a>
             </Link>
           </p>
           <p css={s_category}>
-            <Link href={`/category/${category.id}`}>
+            <Link href={`/category/${category.id}/1`}>
               <a css={s_categoryLink}>
                 <RiFolder2Line css={s_categoryIcon} />
                 {category.name}
@@ -31,7 +41,7 @@ const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
           </p>
         </div>
         <h2 css={s_title2}>
-          <Link href={`/detail/${id}`}>
+          <Link href={`/post/${id}`}>
             <a css={s_title2Link}>{title}</a>
           </Link>
         </h2>
@@ -39,7 +49,7 @@ const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
           {tag.map(props => {
             return (
               <li css={s_tagItem} key={props.id}>
-                <Link href={`/tag/${props.id}`}>
+                <Link href={`/tag/${props.id}/1`}>
                   <a css={s_tagLink}>
                     <RiPriceTag3Line css={s_tagIcon} />
                     {props.name}
@@ -53,7 +63,7 @@ const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
       <div css={s_articleMain}>
         <p css={s_articleMainText}>{text}</p>
         <p css={s_btnWrap}>
-          <Link href={`/detail/${id}`}>
+          <Link href={`/post/${id}`}>
             <a css={s_btn}>Read More</a>
           </Link>
         </p>
@@ -65,9 +75,9 @@ const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
 Card.displayName = 'Card';
 export default Card;
 
-//=============================================
-// style
-//=============================================
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_article = css`
   background-color: #fff;
   box-shadow: 0 1px 5px rgb(0 0 1 / 5%);

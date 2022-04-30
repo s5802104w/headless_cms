@@ -1,8 +1,11 @@
-import type { VFC } from 'react';
+import { VFC } from 'react';
 import Link from 'next/link';
 import { css } from '@emotion/react';
 import { RiFolder2Line, RiPriceTag3Line } from 'react-icons/ri';
 
+/**---------------------------------------------------------------------------
+ * type
+ * --------------------------------------------------------------------------*/
 type Props = {
   title: string;
   list: {
@@ -11,6 +14,9 @@ type Props = {
   }[];
 };
 
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const Sidenavi: VFC<Props> = ({ title, list }) => {
   return (
     <aside css={s_aside}>
@@ -19,7 +25,7 @@ const Sidenavi: VFC<Props> = ({ title, list }) => {
         {list.map(item => {
           return (
             <li css={s_item} key={item.id}>
-              <Link href={`/${title}/${item.id}`}>
+              <Link href={`/${title}/${item.id}/1`}>
                 <a css={s_itemLink}>
                   {title === 'category' && <RiFolder2Line css={s_itemIcon} />}
                   {title === 'tag' && <RiPriceTag3Line css={s_itemIcon} />}
@@ -37,9 +43,9 @@ const Sidenavi: VFC<Props> = ({ title, list }) => {
 Sidenavi.displayName = 'Sidenavi';
 export default Sidenavi;
 
-//=============================================
-// style
-//=============================================
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_aside = css`
   background-color: #fff;
   box-shadow: 0 1px 5px rgba(0, 0, 1, 0.05);

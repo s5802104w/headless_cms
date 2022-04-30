@@ -1,14 +1,23 @@
-import type { ReactElement } from 'react';
-import LayoutBase from '@/component/layout/Base';
-import LayoutStandard from '@/component/layout/Standard';
+import { ReactElement } from 'react';
+import Head from 'next/head';
+import { GetStaticProps } from 'next';
+import LayoutBase from '@/component/layouts/Base';
+import LayoutStandard from '@/component/layouts/Standard';
 import { css } from '@emotion/react';
-import { client } from '@/lib/client';
+import { client } from '@/libs/client';
 import { CategoryProps } from '@/type/category';
 import { TagProps } from '@/type/tag';
+import { PostProps } from '@/type/post';
 
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const About = () => {
   return (
     <>
+      <Head>
+        <title>About page</title>
+      </Head>
       <div css={s_wrap}>
         <h2 css={s_title2}>About page</h2>
         <p>
@@ -35,11 +44,18 @@ const About = () => {
 About.displayName = 'About';
 export default About;
 
-About.getLayout = function getLayout(
-  page: ReactElement,
-  categoryData: CategoryProps,
-  tagData: TagProps
-) {
+/**---------------------------------------------------------------------------
+ * layout
+ * --------------------------------------------------------------------------*/
+About.getLayout = ({
+  page,
+  categoryData,
+  tagData,
+}: {
+  page: ReactElement;
+  categoryData: CategoryProps[];
+  tagData: TagProps[];
+}) => {
   return (
     <LayoutBase>
       <LayoutStandard categoryData={categoryData} tagData={tagData}>
@@ -49,10 +65,15 @@ About.getLayout = function getLayout(
   );
 };
 
-export const getStaticProps = async () => {
-  const data = await client.get({ endpoint: 'blog' });
-  const categoryData = await client.get({ endpoint: 'category' });
-  const tagData = await client.get({ endpoint: 'tag' });
+/**---------------------------------------------------------------------------
+ * connect
+ * --------------------------------------------------------------------------*/
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await client.getList<PostProps>({ endpoint: 'blog' });
+  const categoryData = await client.getList<CategoryProps>({
+    endpoint: 'category',
+  });
+  const tagData = await client.getList<TagProps>({ endpoint: 'tag' });
   return {
     props: {
       blog: data.contents,
@@ -62,6 +83,9 @@ export const getStaticProps = async () => {
   };
 };
 
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_wrap = css`
   background-color: #fff;
   box-shadow: 0 1px 5px rgb(0, 0, 1, 0.05);

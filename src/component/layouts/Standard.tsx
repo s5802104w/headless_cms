@@ -1,5 +1,5 @@
-import type { VFC, ReactElement } from 'react';
-import { useRouter } from 'next/router';
+import { VFC, ReactElement } from 'react';
+import { usePath } from '@/hooks/usePath';
 import Header from '@/component/common/Header';
 import Sidenavi from '@/component/common/Sidenavi';
 import Footer from '@/component/common/Footer';
@@ -7,29 +7,33 @@ import { css } from '@emotion/react';
 import { CategoryProps } from '@/type/category';
 import { TagProps } from '@/type/tag';
 
+/**---------------------------------------------------------------------------
+ * type
+ * --------------------------------------------------------------------------*/
 type Props = {
   children: ReactElement;
   categoryData: CategoryProps[];
   tagData: TagProps[];
 };
 
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const LayoutStandard: VFC<Props> = ({ children, categoryData, tagData }) => {
-  const router = useRouter();
-  const firstFloor = router.asPath.split('/')[1];
-  const id = router.query[firstFloor];
+  const [firstFloor, firstFloorId] = usePath();
 
   return (
     <>
       <Header />
-      {router.query[firstFloor] && (
+      {firstFloorId && (
         <p css={s_text}>
           {`${firstFloor}` === 'category' &&
             categoryData.map(item => {
-              return item.id === id && item.name;
+              return item.id === firstFloorId && item.name;
             })}
           {`${firstFloor}` === 'tag' &&
             tagData.map(item => {
-              return item.id === id && item.name;
+              return item.id === firstFloorId && item.name;
             })}
         </p>
       )}
@@ -48,9 +52,9 @@ const LayoutStandard: VFC<Props> = ({ children, categoryData, tagData }) => {
 LayoutStandard.displayName = 'LayoutStandard';
 export default LayoutStandard;
 
-//=============================================
-// style
-//=============================================
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_wrap = css`
   background-color: #f2f2f2;
   display: flex;

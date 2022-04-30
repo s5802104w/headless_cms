@@ -1,47 +1,47 @@
-import Link from 'next/link';
-import { GetStaticProps } from 'next';
 import { ReactElement } from 'react';
-import { css } from '@emotion/react';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
+import LayoutBase from '@/component/layouts/Base';
+import LayoutStandard from '@/component/layouts/Standard';
+import Detail from '@/component/Detail';
+import { client } from '@/libs/client';
 import { PostProps } from '@/type/post';
 import { CategoryProps } from '@/type/category';
 import { TagProps } from '@/type/tag';
-import LayoutBase from '@/component/layouts/Base';
-import LayoutStandard from '@/component/layouts/Standard';
-import Card from '@/component/Card';
-import Button from '@/component/Button';
-import { client } from '@/libs/client';
 
 /**---------------------------------------------------------------------------
  * type
  * --------------------------------------------------------------------------*/
 type Props = {
-  blog: PostProps[];
-  totalCount: number;
+  blog: PostProps;
 };
+
+/**---------------------------------------------------------------------------
+ * data
+ * --------------------------------------------------------------------------*/
+const limitPage = process.env.NEXT_PUBLIC_LIMIT_PAGE;
 
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Home = ({ blog }: Props) => {
+const PostPage = ({ blog }: Props) => {
   return (
     <>
-      {blog.map(props => {
-        return <Card {...props} key={props.id} />;
-      })}
-      <Link href="/post/page/1" passHref>
-        <Button css={s_button}>Show More...</Button>
-      </Link>
+      <Head>
+        <title>{blog.title} | Headless CMS Blog</title>
+      </Head>
+      <Detail key={blog.id} {...blog} />
     </>
   );
 };
 
-Home.displayName = 'Home';
-export default Home;
+PostPage.displayName = 'PostPage';
+export default PostPage;
 
 /**---------------------------------------------------------------------------
  * layout
  * --------------------------------------------------------------------------*/
-Home.getLayout = ({
+PostPage.getLayout = ({
   page,
   categoryData,
   tagData,
@@ -62,28 +62,32 @@ Home.getLayout = ({
 /**---------------------------------------------------------------------------
  * connect
  * --------------------------------------------------------------------------*/
-export const getStaticProps: GetStaticProps = async () => {
-  const data = await client.getList<PostProps>({
+export const getStaticPaths: GetStaticPaths = async () => {
+  const data = await client.getList({
     endpoint: 'blog',
-    queries: { limit: 3 },
+    queries: { limit: limitPage },
+  });
+  const paths = data.contents.map(
+    (content: PostProps) => `/post/${content.id}`
+  );
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ctx => {
+  const postId = `${ctx.params?.post}`;
+  const data = await client.getListDetail<PostProps>({
+    endpoint: 'blog',
+    contentId: postId,
   });
   const categoryData = await client.getList<CategoryProps>({
     endpoint: 'category',
   });
   const tagData = await client.getList<TagProps>({ endpoint: 'tag' });
-
   return {
     props: {
-      blog: data.contents,
+      blog: data,
       categoryData: categoryData.contents,
       tagData: tagData.contents,
     },
   };
 };
-
-/**---------------------------------------------------------------------------
- * style
- * --------------------------------------------------------------------------*/
-const s_button = css`
-  margin: 40px auto 40px;
-`;

@@ -1,11 +1,17 @@
+import dayjs from 'dayjs';
 import { css } from '@emotion/react';
 
+const thisYear = dayjs().format('YYYY');
+
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const Footer = () => {
   return (
     <footer css={s_footer}>
       <p css={s_text}>
         <small css={s_small}>
-          Copyright © 2022 sandwhale Inc. All Rights Reserved.
+          Copyright © {thisYear} XXXXXX All Rights Reserved.
         </small>
       </p>
     </footer>
@@ -15,9 +21,9 @@ const Footer = () => {
 Footer.displayName = 'Footer';
 export default Footer;
 
-//=============================================
-// style
-//=============================================
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_footer = css`
   background-color: #020202;
   padding: 20px 0;

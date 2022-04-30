@@ -1,15 +1,14 @@
-import Link from 'next/link';
-import { GetStaticProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { ReactElement } from 'react';
-import { css } from '@emotion/react';
 import { PostProps } from '@/type/post';
 import { CategoryProps } from '@/type/category';
 import { TagProps } from '@/type/tag';
 import LayoutBase from '@/component/layouts/Base';
 import LayoutStandard from '@/component/layouts/Standard';
 import Card from '@/component/Card';
-import Button from '@/component/Button';
+import Pager from '@/component/Pager';
 import { client } from '@/libs/client';
+import { range } from '@/utils/range';
 
 /**---------------------------------------------------------------------------
  * type
@@ -20,28 +19,31 @@ type Props = {
 };
 
 /**---------------------------------------------------------------------------
+ * data
+ * --------------------------------------------------------------------------*/
+const perPage = process.env.NEXT_PUBLIC_PER_PAGE;
+
+/**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Home = ({ blog }: Props) => {
+const PostListPage = ({ blog, totalCount }: Props) => {
   return (
     <>
       {blog.map(props => {
         return <Card {...props} key={props.id} />;
       })}
-      <Link href="/post/page/1" passHref>
-        <Button css={s_button}>Show More...</Button>
-      </Link>
+      <Pager totalCount={totalCount} />
     </>
   );
 };
 
-Home.displayName = 'Home';
-export default Home;
+PostListPage.displayName = 'PostListPage';
+export default PostListPage;
 
 /**---------------------------------------------------------------------------
  * layout
  * --------------------------------------------------------------------------*/
-Home.getLayout = ({
+PostListPage.getLayout = ({
   page,
   categoryData,
   tagData,
@@ -62,28 +64,30 @@ Home.getLayout = ({
 /**---------------------------------------------------------------------------
  * connect
  * --------------------------------------------------------------------------*/
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const data = await client.getList({ endpoint: 'blog' });
+  const paths = range(1, Math.ceil(data.totalCount / perPage)).map(
+    pagerNum => `/post/page/${pagerNum}`
+  );
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ctx => {
+  const pageId = Number(ctx.params?.id);
   const data = await client.getList<PostProps>({
     endpoint: 'blog',
-    queries: { limit: 3 },
+    queries: { limit: perPage, offset: (pageId - 1) * perPage },
   });
   const categoryData = await client.getList<CategoryProps>({
     endpoint: 'category',
   });
   const tagData = await client.getList<TagProps>({ endpoint: 'tag' });
-
   return {
     props: {
       blog: data.contents,
+      totalCount: data.totalCount,
       categoryData: categoryData.contents,
       tagData: tagData.contents,
     },
   };
 };
-
-/**---------------------------------------------------------------------------
- * style
- * --------------------------------------------------------------------------*/
-const s_button = css`
-  margin: 40px auto 40px;
-`;

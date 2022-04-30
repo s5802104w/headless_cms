@@ -1,6 +1,9 @@
-import type { VFC } from 'react';
+import { VFC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { css } from '@emotion/react';
 import {
   RiCalendarTodoFill,
@@ -9,6 +12,12 @@ import {
 } from 'react-icons/ri';
 import { PostProps } from '@/type/post';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
 const Detail: VFC<PostProps> = ({
   id,
   time,
@@ -18,21 +27,22 @@ const Detail: VFC<PostProps> = ({
   category,
   tag,
 }) => {
+  const formatedTime = dayjs.utc(time).tz('Asia/Tokyo').format('YYYY.MM.DD');
   return (
     <article css={s_article}>
       <h2 css={s_title2}>{title}</h2>
       <div css={s_articleHead}>
         <div css={s_articleHeadWrap}>
           <p css={s_time}>
-            <Link href={`/detail/${id}`}>
+            <Link href={`/post/${id}`}>
               <a css={s_timeLink}>
                 <RiCalendarTodoFill css={s_timeIcon} />
-                <time>{time}</time>
+                <time>{formatedTime}</time>
               </a>
             </Link>
           </p>
           <p css={s_category}>
-            <Link href={`/category/${category.id}`}>
+            <Link href={`/category/${category.id}/1`}>
               <a css={s_categoryLink}>
                 <RiFolder2Line css={s_categoryIcon} />
                 {category.name}
@@ -59,7 +69,7 @@ const Detail: VFC<PostProps> = ({
         {tag.map(props => {
           return (
             <li css={s_tagItem} key={props.id}>
-              <Link href={`/tag/${props.id}`}>
+              <Link href={`/tag/${props.id}/1`}>
                 <a css={s_tagLink}>
                   <RiPriceTag3Line css={s_tagIcon} />
                   {props.name}
@@ -76,9 +86,9 @@ const Detail: VFC<PostProps> = ({
 Detail.displayName = 'Detail';
 export default Detail;
 
-//=============================================
-// style
-//=============================================
+/**---------------------------------------------------------------------------
+ * style
+ * --------------------------------------------------------------------------*/
 const s_article = css`
   background-color: #fff;
   box-shadow: 0 1px 5px rgb(0 0 1 / 5%);

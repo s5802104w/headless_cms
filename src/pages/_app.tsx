@@ -1,10 +1,13 @@
 import Head from 'next/head';
-import type { ReactElement, ReactNode } from 'react';
-import type { NextPage } from 'next';
-import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode } from 'react';
+import { NextPage } from 'next';
+import { AppProps } from 'next/app';
 import { Global } from '@emotion/react';
 import { styles } from '@/styles/globals';
 
+/**---------------------------------------------------------------------------
+ * type
+ * --------------------------------------------------------------------------*/
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -13,8 +16,16 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+/**---------------------------------------------------------------------------
+ * component
+ * --------------------------------------------------------------------------*/
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? (page => page);
+  const props = {
+    page: <Component {...pageProps} />,
+    categoryData: pageProps.categoryData,
+    tagData: pageProps.tagData,
+  };
   return (
     <>
       <Head>
@@ -22,15 +33,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Global styles={styles} />
-      {getLayout(
-        <Component {...pageProps} />,
-        pageProps.categoryData,
-        pageProps.tagData
-      )}
+      {getLayout({
+        ...props,
+        type: '',
+        props: undefined,
+        key: null,
+      })}
     </>
   );
-}
+};
 
 MyApp.displayName = 'MyApp';
-
 export default MyApp;
