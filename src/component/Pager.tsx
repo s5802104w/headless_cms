@@ -21,7 +21,7 @@ const perPage = process.env.NEXT_PUBLIC_PER_PAGE;
  * --------------------------------------------------------------------------*/
 const Pager: VFC<Props> = ({ totalCount }) => {
   const router = useRouter();
-  const pageNum = Number(router.query.id);
+  const pageNum = Number(router.query.id) || Number(router.query.page);
   const path = router.asPath.replace(/\d*$/, '');
 
   return (

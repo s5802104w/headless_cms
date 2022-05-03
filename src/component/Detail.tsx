@@ -52,7 +52,7 @@ const Detail: VFC<PostProps> = ({
         </div>
       </div>
       <div css={s_articleMain}>
-        {img.url && (
+        {img?.url && (
           <div css={s_articleMainImgWrap}>
             <Image
               src={img.url}

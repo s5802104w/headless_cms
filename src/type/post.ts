@@ -5,8 +5,8 @@ import { TagProps } from '@/type/tag';
 export type PostContentsProps = {
   time: string;
   title: string;
-  text: string;
-  img: MicroCMSImage;
+  text?: string;
+  img?: MicroCMSImage;
   category: CategoryProps;
   tag: TagProps[];
 };

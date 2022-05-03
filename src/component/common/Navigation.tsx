@@ -55,12 +55,10 @@ export default Navigation;
  * style
  * --------------------------------------------------------------------------*/
 const s_nav = css`
-  border-top: 2px solid #020202;
   display: block;
   font-size: 15px;
   font-weight: bold;
-  margin-top: 30px;
-  padding-top: 30px;
+  padding: 30px 0;
 `;
 const s_list = css`
   display: flex;
@@ -69,13 +67,23 @@ const s_list = css`
 const s_item = css``;
 const s_link = css`
   color: #3d3d3d;
+  display: block;
   margin: 0 15px;
-  padding-bottom: 10px;
   &:hover {
     color: #005799;
   }
 `;
 const s_isActive = css`
-  border-bottom: 5px solid #005799;
   color: #005799;
+  position: relative;
+  &::after {
+    background-color: #005799;
+    bottom: -11px;
+    content: '';
+    display: block;
+    height: 5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
 `;

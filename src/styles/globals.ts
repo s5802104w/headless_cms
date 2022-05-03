@@ -96,4 +96,8 @@ export const styles = css`
   a {
     cursor: pointer;
   }
+  [type='search']::-webkit-search-cancel-button,
+  [type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
 `;

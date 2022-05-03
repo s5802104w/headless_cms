@@ -1,6 +1,7 @@
 import { VFC, ReactElement } from 'react';
 import { usePath } from '@/hooks/usePath';
 import Header from '@/component/common/Header';
+import SearchInput from '@/component/SearchInput';
 import Sidenavi from '@/component/common/Sidenavi';
 import Footer from '@/component/common/Footer';
 import { css } from '@emotion/react';
@@ -21,22 +22,24 @@ type Props = {
  * --------------------------------------------------------------------------*/
 const LayoutStandard: VFC<Props> = ({ children, categoryData, tagData }) => {
   const [firstFloor, firstFloorId] = usePath();
-
   return (
     <>
       <Header />
-      {firstFloorId && (
+      {`${firstFloor}` === 'category' && (
         <p css={s_text}>
-          {`${firstFloor}` === 'category' &&
-            categoryData.map(item => {
-              return item.id === firstFloorId && item.name;
-            })}
-          {`${firstFloor}` === 'tag' &&
-            tagData.map(item => {
-              return item.id === firstFloorId && item.name;
-            })}
+          {categoryData.map(item => {
+            return item.id === firstFloorId && item.name;
+          })}
         </p>
       )}
+      {`${firstFloor}` === 'tag' && (
+        <p css={s_text}>
+          {tagData.map(item => {
+            return item.id === firstFloorId && item.name;
+          })}
+        </p>
+      )}
+      {firstFloor === 'search' && <SearchInput />}
       <div css={s_wrap}>
         <main css={s_main}>{children}</main>
         <div css={s_side}>
