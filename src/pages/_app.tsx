@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
+import { ReactElement, ReactNode, useRef } from 'react';
+import { SearchFormContext } from '@/context/searchInputContext';
 import { Global } from '@emotion/react';
 import { styles } from '@/styles/globals';
 
@@ -26,19 +27,23 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
     categoryData: pageProps.categoryData,
     tagData: pageProps.tagData,
   };
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <>
-      <Head>
-        <title>Headless CMS Blog</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Global styles={styles} />
-      {getLayout({
-        ...props,
-        type: '',
-        props: undefined,
-        key: null,
-      })}
+      <SearchFormContext.Provider value={{ searchInputRef }}>
+        <Head>
+          <title>Headless CMS Blog</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Global styles={styles} />
+        {getLayout({
+          ...props,
+          type: '',
+          props: undefined,
+          key: null,
+        })}
+      </SearchFormContext.Provider>
     </>
   );
 };

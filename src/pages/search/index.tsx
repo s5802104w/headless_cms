@@ -7,22 +7,13 @@ import { TagProps } from '@/type/tag';
 import LayoutBase from '@/component/layouts/Base';
 import LayoutStandard from '@/component/layouts/Standard';
 import Card from '@/component/Card';
-import axios, { AxiosResponse } from 'axios';
 import Pager from '@/component/Pager';
+import Loading from '@/component/Loading';
+import axios, { AxiosResponse } from 'axios';
 import { client } from '@/libs/client';
 import { css } from '@emotion/react';
 import { RiAlertLine } from 'react-icons/ri';
 import { MicroCMSListResponse } from 'microcms-js-sdk';
-// import { range } from '@/utils/range';
-
-/**---------------------------------------------------------------------------
- * type
- * --------------------------------------------------------------------------*/
-
-/**---------------------------------------------------------------------------
- * data
- * --------------------------------------------------------------------------*/
-// const perPage = process.env.NEXT_PUBLIC_PER_PAGE;
 
 /**---------------------------------------------------------------------------
  * component
@@ -31,29 +22,44 @@ const SearchPage = () => {
   const [res, setRes] = useState<MicroCMSListResponse<PostProps> | undefined>(
     undefined
   );
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const keyword = router.query.keyword as string;
   const page = router.query.page as string;
 
   useEffect(() => {
-    const fetch = async (): Promise<void> => {
-      try {
-        const res: AxiosResponse<
-          MicroCMSListResponse<PostProps>,
-          unknown
-        > = await axios.get('/api/search/', {
-          params: {
-            keyword,
-            page,
-          },
-        });
-        setRes(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetch();
+    if (keyword === void 0) {
+      setRes(undefined);
+    } else {
+      setIsLoading(true);
+      const fetch = async (): Promise<void> => {
+        try {
+          const res: AxiosResponse<
+            MicroCMSListResponse<PostProps>,
+            unknown
+          > = await axios.get('/api/search/', {
+            params: {
+              keyword,
+              page,
+            },
+          });
+          setRes(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetch().then(() => {
+        setIsLoading(false);
+      });
+    }
   }, [keyword, page]);
+
+  if (isLoading)
+    return (
+      <div css={s_loadingWrap}>
+        <Loading />
+      </div>
+    );
 
   return (
     <>
@@ -82,7 +88,9 @@ const SearchPage = () => {
             />
           );
         })}
-      {res?.contents && res.contents.length > 0 && <Pager totalCount={res.totalCount} />}
+      {res?.contents && res.contents.length > 0 && (
+        <Pager totalCount={res.totalCount} />
+      )}
     </>
   );
 };
@@ -130,6 +138,15 @@ export const getStaticProps: GetStaticProps = async () => {
 /**---------------------------------------------------------------------------
  * style
  * --------------------------------------------------------------------------*/
+const s_loadingWrap = css`
+  background-color: #fff;
+  box-shadow: 0 1px 5px rgb(0 0 1 / 5%);
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+`;
+
 const s_box = css`
   background-color: #fff;
   box-shadow: 0 1px 5px rgb(0 0 1 / 5%);

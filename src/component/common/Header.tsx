@@ -1,14 +1,11 @@
-import Link from 'next/link';
 import Navigation from '@/component/common/Navigation';
-import { RiSearchLine } from 'react-icons/ri';
+import ButtonSearch from '@/component/ButtonSearch';
 import { css } from '@emotion/react';
-import { usePath } from '@/hooks/usePath';
 
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
 const Header = () => {
-  const [firstFloor] = usePath();
   return (
     <header css={s_header}>
       <div css={s_headerHead}>
@@ -17,11 +14,7 @@ const Header = () => {
       </div>
       <div css={s_headerFoot}>
         <Navigation />
-        <Link href="/search">
-          <a css={firstFloor === 'search' ? s_searchBtnActive : s_searchBtn}>
-            <RiSearchLine />
-          </a>
-        </Link>
+        <ButtonSearch />
       </div>
     </header>
   );
@@ -53,28 +46,4 @@ const s_text = css`
 `;
 const s_headerFoot = css`
   position: relative;
-`;
-const s_searchBtn = css`
-  align-items: center;
-  background-color: #020202;
-  border-radius: 20px;
-  bottom: 0;
-  color: #fff;
-  display: flex;
-  font-size: 16px;
-  height: 36px;
-  justify-content: center;
-  margin: auto;
-  position: absolute;
-  right: 30px;
-  top: 0;
-  transition: all 0.25s ease-out;
-  width: 36px;
-  &:hover {
-    background-color: #005799;
-  }
-`;
-const s_searchBtnActive = css`
-  ${s_searchBtn}
-  background-color: #005799;
 `;

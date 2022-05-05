@@ -1,37 +1,20 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState, VFC } from 'react';
-import { useRouter } from 'next/router';
+import { VFC, useContext } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
 import { css } from '@emotion/react';
+import { SearchFormContext } from '@/context/searchInputContext';
+import { useSearchInput } from '@/hooks/search/useSearchInput';
 
 /**---------------------------------------------------------------------------
  * component
- * --------------------------------------------------------------------------*/
+ * ------------------------------------------------ --------------------------*/
 const SearchInput: VFC = () => {
-  const router = useRouter();
-  const [search, setSearch] = useState<string>('');
-
-  useEffect(() => {
-    if (router.query.keyword) {
-      setSearch(router.query.keyword as string);
-    }
-  }, [router.query.keyword]);
-
-  const handleKeyDownSearch = (
-    e: KeyboardEvent<HTMLInputElement | HTMLAnchorElement>
-  ) => {
-    if (e.key === 'Enter') {
-      router.push(`/search/?keyword=${search}&page=1`);
-    }
-  };
-
-  const handleClickSearchButton = () => {
-    router.push(`/search/?keyword=${search}&page=1`);
-  };
-
-  const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = e.currentTarget.value;
-    setSearch(val);
-  };
+  const { searchInputRef } = useContext(SearchFormContext);
+  const {
+    search,
+    handleKeyDownSearch,
+    handleClickSearchButton,
+    handleChangeSearchInput,
+  } = useSearchInput();
 
   return (
     <div css={s_wrap}>
@@ -45,6 +28,7 @@ const SearchInput: VFC = () => {
           value={search}
           onKeyDown={handleKeyDownSearch}
           onChange={handleChangeSearchInput}
+          ref={searchInputRef}
         />
         <a
           css={s_button}
