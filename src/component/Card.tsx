@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -17,7 +17,7 @@ dayjs.extend(timezone);
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Card: VFC<PostProps> = ({ id, time, title, text, category, tag }) => {
+const Card: FC<PostProps> = ({ id, time, title, text, category, tag }) => {
   const formatedTime = dayjs.utc(time).tz('Asia/Tokyo').format('YYYY.MM.DD');
   return (
     <article css={s_article}>

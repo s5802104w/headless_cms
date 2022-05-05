@@ -1,4 +1,4 @@
-import { VFC, useContext } from 'react';
+import { FC, useContext } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
 import { css } from '@emotion/react';
 import { SearchFormContext } from '@/context/searchInputContext';
@@ -7,7 +7,7 @@ import { useSearchInput } from '@/hooks/search/useSearchInput';
 /**---------------------------------------------------------------------------
  * component
  * ------------------------------------------------ --------------------------*/
-const SearchInput: VFC = () => {
+const SearchInput: FC = () => {
   const { searchInputRef } = useContext(SearchFormContext);
   const {
     search,

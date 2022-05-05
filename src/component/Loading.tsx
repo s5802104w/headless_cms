@@ -1,7 +1,7 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import { Preloader, Oval } from 'react-preloader-icon';
 
-const Loading: VFC = () => (
+const Loading: FC = () => (
   <Preloader
     use={Oval}
     size={60}

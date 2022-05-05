@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import dayjs from 'dayjs';
 import { css } from '@emotion/react';
 
@@ -6,7 +7,7 @@ const thisYear = dayjs().format('YYYY');
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Footer = () => {
+const Footer: FC = () => {
   return (
     <footer css={s_footer}>
       <p css={s_text}>

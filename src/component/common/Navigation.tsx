@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { css } from '@emotion/react';
@@ -21,7 +22,7 @@ const naviList = [
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Navigation = () => {
+const Navigation: FC = () => {
   const router = useRouter();
   return (
     <nav css={s_nav}>

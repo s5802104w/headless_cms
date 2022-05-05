@@ -1,4 +1,4 @@
-import { VFC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 
 /**---------------------------------------------------------------------------
  * type
@@ -10,7 +10,7 @@ type Props = {
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const LayoutBase: VFC<Props> = ({ children }) => {
+const LayoutBase: FC<Props> = ({ children }) => {
   return <>{children}</>;
 };
 

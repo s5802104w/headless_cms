@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
 import { css } from '@emotion/react';
 import { usePath } from '@/hooks/usePath';
@@ -8,7 +8,7 @@ import { SearchFormContext } from '@/context/searchInputContext';
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const ButtonSearch = () => {
+const ButtonSearch: FC = () => {
   const [firstFloor] = usePath();
   const { searchInputRef } = useContext(SearchFormContext);
 

@@ -1,4 +1,4 @@
-import { VFC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 import { usePath } from '@/hooks/usePath';
 import Header from '@/component/common/Header';
 import SearchInput from '@/component/SearchInput';
@@ -20,7 +20,7 @@ type Props = {
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const LayoutStandard: VFC<Props> = ({ children, categoryData, tagData }) => {
+const LayoutStandard: FC<Props> = ({ children, categoryData, tagData }) => {
   const [firstFloor, firstFloorId] = usePath();
   return (
     <>

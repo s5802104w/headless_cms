@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { css } from '@emotion/react';
 import { range } from '@/utils/range';
 
@@ -19,7 +19,7 @@ const perPage = process.env.NEXT_PUBLIC_PER_PAGE;
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Pager: VFC<Props> = ({ totalCount }) => {
+const Pager: FC<Props> = ({ totalCount }) => {
   const router = useRouter();
   const pageNum = Number(router.query.id) || Number(router.query.page);
   const path = router.asPath.replace(/\d*$/, '');

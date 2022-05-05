@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 import { css } from '@emotion/react';
 import { RiFolder2Line, RiPriceTag3Line } from 'react-icons/ri';
@@ -17,7 +17,7 @@ type Props = {
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Sidenavi: VFC<Props> = ({ title, list }) => {
+const Sidenavi: FC<Props> = ({ title, list }) => {
   return (
     <aside css={s_aside}>
       <h2 css={s_title2}>{title}</h2>

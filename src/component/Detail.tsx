@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dayjs from 'dayjs';
@@ -18,7 +18,7 @@ dayjs.extend(timezone);
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Detail: VFC<PostProps> = ({
+const Detail: FC<PostProps> = ({
   id,
   time,
   title,

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import Navigation from '@/component/common/Navigation';
 import ButtonSearch from '@/component/ButtonSearch';
 import { css } from '@emotion/react';
@@ -5,7 +6,7 @@ import { css } from '@emotion/react';
 /**---------------------------------------------------------------------------
  * component
  * --------------------------------------------------------------------------*/
-const Header = () => {
+const Header: FC = () => {
   return (
     <header css={s_header}>
       <div css={s_headerHead}>
